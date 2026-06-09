@@ -32,7 +32,7 @@ This serves as a **Proof of Test Execution**. Because the contact is never delet
 
 ---
 
-## 🔑 How to Find the Login Details
+## 🔑 How to Find the Login Details.
 
 Because `Faker.js` randomizes the account's email and password on every single test run to prevent system conflicts, you cannot guess the login details. You can retrieve them using one of the two methods below:
 
