@@ -1,0 +1,27 @@
+name: Cypress API Smoke Suite
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm' # Speeds up subsequent pipeline runs by caching node_modules
+
+      - name: Clean Install Dependencies
+        run: npm ci
+
+      - name: Execute Cypress API Smoke Tests
+        run: npx cypress run --spec "cypress/e2e/contact_list_api.cy.js"
