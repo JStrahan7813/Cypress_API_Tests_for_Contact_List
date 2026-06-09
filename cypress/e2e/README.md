@@ -40,3 +40,32 @@ Because `Faker.js` randomizes the account's email and password on every single t
 The script includes a file-system task designed to write the credentials directly to your local workspace right before creating the user:
 ```javascript
 cy.task('saveCredentials', credentials);
+
+# 🚀 CI/CD Pipeline: Cypress API Smoke Suite
+
+This repository features an automated **Continuous Integration (CI)** pipeline powered by **GitHub Actions**. It ensures code quality and backend stability by automatically executing the test suite in an isolated cloud environment every time changes are proposed or made.
+
+---
+
+## 📋 What Does This Workflow Do?
+
+The configuration file defines a series of automated triggers, environments, and sequential execution steps to run your Cypress API smoke tests. Here is a breakdown of how it works under the hood:
+
+### 1. Automated Event Triggers (`on:`)
+The pipeline monitors your repository and wakes up automatically under two core scenarios:
+* **`push` to `main`:** Any time code is directly merged or pushed into your primary production branch.
+* **`pull_request` to `main`:** Any time a developer opens a pull request trying to merge new code into `main`. This allows the pipeline to act as a **gatekeeper**, ensuring no broken code gets merged.
+
+### 2. Isolated Cloud Execution Environment (`runs-on:`)
+When triggered, GitHub spins up a clean, disposable virtual machine in their cloud infrastructure:
+* **OS Platform:** `ubuntu-latest` (The fastest, most secure, and industry-standard Linux runner).
+* This eliminates the *"it works on my machine"* dilemma by executing the tests in an completely standardized environment.
+
+---
+
+## 🛠️ Step-by-Step Execution Sequence
+
+Inside the virtual cloud machine, the workflow carries out these specific, sequential steps to validate your application:
+
+```text
+  [1. Checkout Repository] ➔ [2. Install Node.js] ➔ [3. Clean Install (npm ci)] ➔ [4. Run Cypress Tests]
