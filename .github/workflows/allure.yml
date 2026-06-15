@@ -31,7 +31,7 @@ jobs:
 
       # 3. Install npm dependencies
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       # 4. Run Cypress tests
       - name: Run Cypress tests
