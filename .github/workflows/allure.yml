@@ -9,6 +9,10 @@ on:
 permissions:
   contents: write
 
+# Fixes the GitHub deprecation warning by forcing Node 24 execution
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   cypress_and_report:
     runs-on: ubuntu-latest
@@ -22,24 +26,23 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # You can change this to your project's Node version
-          cache: 'npm'       # Caches npm dependencies for faster subsequent runs
+          node-version: '22' # Uses a modern Node LTS for your project code
+          cache: 'npm'
 
       # 3. Install npm dependencies
       - name: Install dependencies
         run: npm ci
 
-      # 4. Run Cypress tests (Generates raw allure results)
-      # This assumes you have a script in package.json like "test:cypress" 
-      # or that your setup automatically outputs to 'allure-results'
+      # 4. Run Cypress tests
       - name: Run Cypress tests
-        run: npm run test:cypress # Replace with your actual npm test command
-        continue-on-error: true  # Ensures the report generates even if tests fail
+        run: npm run test:cypress
+        continue-on-error: true
 
-      # 5. Get Allure history from gh-pages branch to maintain trend lines
+      # 5. Get Allure history (FIXED: added continue-on-error so it won't crash on the first run)
       - name: Get Allure history
         uses: actions/checkout@v4
         if: always()
+        continue-on-error: true 
         with:
           ref: gh-pages
           path: gh-pages-dir
@@ -49,7 +52,7 @@ jobs:
         uses: simple-elf/allure-report-action@master
         if: always()
         with:
-          allure_results: allure-results # Matches your Cypress allure configuration folder
+          allure_results: allure-results
           allure_history: allure-history
           keep_reports: 20
 
