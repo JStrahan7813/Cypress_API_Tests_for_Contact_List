@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cypress run",
-    "test:open": "cypress open"
+    "test:open": "cypress open",
+    "test:cypress": "cypress run --env allure=true"
   },
   "keywords": [
     "api",
@@ -16,7 +17,8 @@
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
-    "cypress": "^15.16.0"
+    "cypress": "^15.16.0",
+    "@allure-javascript/cypress": "^3.0.5"
   },
   "dependencies": {
     "ansi-escapes": "^7.3.0",
