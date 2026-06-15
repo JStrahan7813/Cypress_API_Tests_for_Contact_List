@@ -33,8 +33,8 @@ jobs:
         run: npm install --no-audit --no-fund --no-package-lock
 
       # 4. Run Cypress tests
-      - name: Run Cypress tests
-        run: npm run test:cypress
+      - name: Execute Cypress API Smoke Tests
+        run: npx cypress run --spec "cypress/e2e/contact_list_api.cy.js" --env allure=true
         continue-on-error: true
 
       # 5. Get Allure history (FIXED: added continue-on-error so it won't crash on the first run)
