@@ -4,7 +4,7 @@ const fs = require('fs');
 const { allureCypress } = require("allure-cypress/reporter"); 
 
 module.exports = defineConfig({
-  allowCypressEnv: false,
+  allowCypressEnv: true,
 
   e2e: {
     setupNodeEvents(on, config) {
