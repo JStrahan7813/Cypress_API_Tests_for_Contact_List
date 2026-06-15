@@ -1,0 +1,63 @@
+name: Run Cypress Tests and Generate Allure Report
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cypress_and_report:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout your code inside the runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # You can change this to your project's Node version
+          cache: 'npm'       # Caches npm dependencies for faster subsequent runs
+
+      # 3. Install npm dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Run Cypress tests (Generates raw allure results)
+      # This assumes you have a script in package.json like "test:cypress" 
+      # or that your setup automatically outputs to 'allure-results'
+      - name: Run Cypress tests
+        run: npm run test:cypress # Replace with your actual npm test command
+        continue-on-error: true  # Ensures the report generates even if tests fail
+
+      # 5. Get Allure history from gh-pages branch to maintain trend lines
+      - name: Get Allure history
+        uses: actions/checkout@v4
+        if: always()
+        with:
+          ref: gh-pages
+          path: gh-pages-dir
+
+      # 6. Generate the Allure Report
+      - name: Generate Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results # Matches your Cypress allure configuration folder
+          allure_history: allure-history
+          keep_reports: 20
+
+      # 7. Publish the report to GitHub Pages
+      - name: Deploy Allure Report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
