@@ -15,3 +15,5 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+// Import Allure reporting commands to track test steps:
+import "allure-cypress";
